@@ -43,9 +43,23 @@ public class ImageManipulation {
 	      final boolean hasAlphaChannel = image.getAlphaRaster() != null;
 	      	      	      
 	      switch(image.getType()){
-	      case TYPE_3BYTE_BGR:
+	      case TYPE_3BYTE_BGR:{
 //	    	  System.out.println("3BYTE_BGR");
-	    	  break;
+	    	  byte[][][] result = new byte[4][height][width];
+	    	  final int pixelLength = 3;
+		         for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
+		            result[3][row][col] = (byte) 255; // alpha
+		            result[2][row][col] = pixels[pixel]; // blue
+		            result[1][row][col] = pixels[pixel + 1]; // green
+		            result[0][row][col] = pixels[pixel + 2]; // red
+		            col++;
+		            if (col == width) {
+		               col = 0;
+		               row++;
+		            }
+		         }
+		      return result;
+	      }
 	      case TYPE_4BYTE_ABGR:
 //	    	  System.out.println("4BYTE_ABGR");
 	    	  break;
@@ -65,11 +79,7 @@ public class ImageManipulation {
 //	    	  System.out.println("INT_ARGB_PRE");
 	    	  break;
 	      case 	TYPE_BYTE_BINARY:{
-//			System.out.println("TYPE_BYTE_BINARY");
-//			System.out.println("H: "+height+", W: "+width);
-//			System.out.println(pixels.length*8);
-//			System.out.println(width * height);
-			
+			System.out.println("TYPE_BYTE_BINARY");		
 			byte[][][] result = new byte[1][height][width];
 			for (int pixel = 0, row = 0, col = 0; pixel < pixels.length ; pixel++) {
 				for(int i=0; i<8 && row<height; i++){
