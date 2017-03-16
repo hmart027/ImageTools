@@ -1322,7 +1322,14 @@ public class ITools {
 		return out;
 	}
 	
-
+	public static float[][] crop(int x0, int y0, int x1, int y1, float[][] img){
+		float[][] out = new float[y1-y0][x1-x0];
+		for(int y=y0; y<y1; y++)
+			for(int x=x0; x<x1; x++)
+				out[y-y0][x-x0] = img[y][x];
+		return out;
+	}
+	
 	public static double[][] crop(int x0, int y0, int x1, int y1, double[][] img){
 		double[][] out = new double[y1-y0][x1-x0];
 		for(int y=y0; y<y1; y++)
