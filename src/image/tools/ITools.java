@@ -26,16 +26,27 @@ public class ITools {
 
 	public static byte[][] shrinkByTwo(byte[][] img){
 		int h0 = img.length;
-		int h1 = h0/2;
-		
+		int h1 = h0/2;	
 		byte[][] out = new byte[h1][h1];
-		
 		for(int y = 0; y<h1; y++){
 			for(int x = 0; x<h1; x++){
 				out[y][x] = (byte)((img[y*2][x*2] & 0x0FF)/4f + (img[y*2][x*2+1] & 0x0FF)/4f + (img[y*2+1][x*2] & 0x0FF)/4f + (img[y*2+1][x*2+1] & 0x0FF)/4f);
 			}
+		}	
+		return out;
+	}
+	
+	public static byte[][][] shrinkByTwo(byte[][][] img){
+		int h0 = img[0].length;
+		int h1 = h0/2;	
+		byte[][][] out = new byte[img.length][h1][h1];
+		for(int c=0; c<img.length; c++){
+			for(int y = 0; y<h1; y++){
+				for(int x = 0; x<h1; x++){
+					out[c][y][x] = (byte)((img[c][y*2][x*2] & 0x0FF)/4f + (img[c][y*2][x*2+1] & 0x0FF)/4f + (img[c][y*2+1][x*2] & 0x0FF)/4f + (img[c][y*2+1][x*2+1] & 0x0FF)/4f);
+				}
+			}	
 		}
-		
 		return out;
 	}
 
@@ -1918,7 +1929,7 @@ public class ITools {
 		byte[][] out = new byte[l[0]][l[1]];
 		for(int y=0; y<l[0]; y++){
 			for(int x=0; x<l[1]; x++){
-				out[y][x] = (byte) ((img[0][y][x]/3+img[1][y][x]/3+img[2][y][x]/3));
+				out[y][x] = (byte) (((img[0][y][x]&0x0FF)/3.0+(img[1][y][x]&0x0FF)/3.0+(img[2][y][x]&0x0FF)/3.0));
 			}
 		}
 		return out;

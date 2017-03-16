@@ -87,7 +87,7 @@ public class ImageManipulation {
 			return result;
 	      }
 	      case TYPE_BYTE_GRAY:{
-	    	  System.out.println("TYPE_BYTE_GRAY");
+//	    	  System.out.println("TYPE_BYTE_GRAY");
 	    	  byte[][][] result = new byte[1][height][width];
 	    	  final int pixelLength = 1;
 	          for (int pixel = 0, row = 0, col = 0; pixel < pixels.length; pixel += pixelLength) {
