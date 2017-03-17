@@ -250,6 +250,34 @@ public class ITools {
 		return out;
 	}
 	
+	public static byte[][][] normilize(double[][][] img){
+		int c0 = img.length;
+		int h0 = img[0].length;
+		int w0 = img[0][0].length;
+		
+		byte[][][] out = new byte[c0][h0][w0];
+		double max = 0, min = 0, range = 0;
+
+		for (int c = 0; c < c0; c++) {
+			for (int y = 0; y < h0; y++) {
+				for (int x = 0; x < w0; x++) {
+					if(img[c][y][x] > max) max = img[c][y][x];
+					if(img[c][y][x] < min) min = img[c][y][x];  
+				}
+			}
+		}
+		range = max-min;
+//		System.out.println("Max: "+max+", Min: "+min);
+		for (int c = 0; c < c0; c++) {
+			for (int y = 0; y < h0; y++) {
+				for (int x = 0; x < w0; x++) {
+					out[c][y][x] = (byte) ((img[c][y][x]-min)/range*255); 
+				}
+			}
+		}
+		return out;
+	}
+	
 	/**
 	 * Normalizes a color image. The color bvand index is expected to be the first one.
 	 * @param img
