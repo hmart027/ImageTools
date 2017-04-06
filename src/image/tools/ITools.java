@@ -26,16 +26,27 @@ public class ITools {
 
 	public static byte[][] shrinkByTwo(byte[][] img){
 		int h0 = img.length;
-		int h1 = h0/2;
-		
+		int h1 = h0/2;	
 		byte[][] out = new byte[h1][h1];
-		
 		for(int y = 0; y<h1; y++){
 			for(int x = 0; x<h1; x++){
 				out[y][x] = (byte)((img[y*2][x*2] & 0x0FF)/4f + (img[y*2][x*2+1] & 0x0FF)/4f + (img[y*2+1][x*2] & 0x0FF)/4f + (img[y*2+1][x*2+1] & 0x0FF)/4f);
 			}
+		}	
+		return out;
+	}
+	
+	public static byte[][][] shrinkByTwo(byte[][][] img){
+		int h0 = img[0].length;
+		int h1 = h0/2;	
+		byte[][][] out = new byte[img.length][h1][h1];
+		for(int c=0; c<img.length; c++){
+			for(int y = 0; y<h1; y++){
+				for(int x = 0; x<h1; x++){
+					out[c][y][x] = (byte)((img[c][y*2][x*2] & 0x0FF)/4f + (img[c][y*2][x*2+1] & 0x0FF)/4f + (img[c][y*2+1][x*2] & 0x0FF)/4f + (img[c][y*2+1][x*2+1] & 0x0FF)/4f);
+				}
+			}	
 		}
-		
 		return out;
 	}
 
@@ -212,6 +223,34 @@ public class ITools {
 	}
 	
 	public static byte[][][] normilize(float[][][] img){
+		int c0 = img.length;
+		int h0 = img[0].length;
+		int w0 = img[0][0].length;
+		
+		byte[][][] out = new byte[c0][h0][w0];
+		double max = 0, min = 0, range = 0;
+
+		for (int c = 0; c < c0; c++) {
+			for (int y = 0; y < h0; y++) {
+				for (int x = 0; x < w0; x++) {
+					if(img[c][y][x] > max) max = img[c][y][x];
+					if(img[c][y][x] < min) min = img[c][y][x];  
+				}
+			}
+		}
+		range = max-min;
+//		System.out.println("Max: "+max+", Min: "+min);
+		for (int c = 0; c < c0; c++) {
+			for (int y = 0; y < h0; y++) {
+				for (int x = 0; x < w0; x++) {
+					out[c][y][x] = (byte) ((img[c][y][x]-min)/range*255); 
+				}
+			}
+		}
+		return out;
+	}
+	
+	public static byte[][][] normilize(double[][][] img){
 		int c0 = img.length;
 		int h0 = img[0].length;
 		int w0 = img[0][0].length;
@@ -1311,7 +1350,14 @@ public class ITools {
 		return out;
 	}
 	
-
+	public static float[][] crop(int x0, int y0, int x1, int y1, float[][] img){
+		float[][] out = new float[y1-y0][x1-x0];
+		for(int y=y0; y<y1; y++)
+			for(int x=x0; x<x1; x++)
+				out[y-y0][x-x0] = img[y][x];
+		return out;
+	}
+	
 	public static double[][] crop(int x0, int y0, int x1, int y1, double[][] img){
 		double[][] out = new double[y1-y0][x1-x0];
 		for(int y=y0; y<y1; y++)
@@ -1918,7 +1964,7 @@ public class ITools {
 		byte[][] out = new byte[l[0]][l[1]];
 		for(int y=0; y<l[0]; y++){
 			for(int x=0; x<l[1]; x++){
-				out[y][x] = (byte) ((img[0][y][x]/3+img[1][y][x]/3+img[2][y][x]/3));
+				out[y][x] = (byte) (((img[0][y][x]&0x0FF)/3.0+(img[1][y][x]&0x0FF)/3.0+(img[2][y][x]&0x0FF)/3.0));
 			}
 		}
 		return out;
