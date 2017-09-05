@@ -17,6 +17,8 @@ public class ImagePanel extends JPanel {
 		this.dim = dim;
 		if(dim!=null)
 			this.setPreferredSize(dim);
+		else
+			this.setPreferredSize(new Dimension(500,500));
 	}
 	
 	public void setImage(BufferedImage img){
