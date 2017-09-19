@@ -1970,80 +1970,179 @@ public class ITools {
 		return out;
 	}
 	
+//	public static double[][] getEdgeKernel(double a){
+//		double[][] out = new double[2][2];
+//		if(a>=360){
+//			int t = (int)(a/360);
+//			a -= t*360;
+//		}
+//		double w = Math.sqrt(0.5);
+//		double a0 = w*w;
+//		double dx, dy;
+//		if(a>=0 && a<45){
+//			dx = w;
+//			dy = dx*Math.tan(a*Math.PI/180.0);
+//			out[0][0] = +a0;
+//			out[0][1] = (a0-Math.abs(dx*dy));
+//			out[1][0] = (Math.abs(dx*dy)-a0);
+//			out[1][1] = -a0;
+//			return out;
+//		}
+//		if(a>=45 && a<135){
+//			dy = w;
+//			dx = dy/Math.tan(a*Math.PI/180.0);
+//			if(a<=90){
+//				out[0][0] = +a0;
+//				out[0][1] = (Math.abs(dx*dy)-a0);
+//				out[1][0] = (a0-Math.abs(dx*dy));
+//				out[1][1] = -a0;
+//			}else{
+//				out[0][0] = (a0-Math.abs(dx*dy));
+//				out[0][1] = -a0;
+//				out[1][0] = +a0;
+//				out[1][1] = (Math.abs(dx*dy)-a0);
+//			}
+//			return out;
+//		}
+//		if(a>=135 && a<225){
+//			dx = w;
+//			dy = dx*Math.tan(a*Math.PI/180.0);
+//			if(a<=180){
+//				out[0][0] = Math.abs(dx*dy)-a0;
+//				out[0][1] = -a0;
+//				out[1][0] = +a0;
+//				out[1][1] = a0-Math.abs(dx*dy);
+//			}else{
+//				out[0][0] = -a0;
+//				out[0][1] = Math.abs(dx*dy)-a0;
+//				out[1][0] = a0-Math.abs(dx*dy);
+//				out[1][1] = +a0;
+//			}
+//			return out;
+//		}
+//		if(a>=225 && a<315){
+//			dy = w;
+//			dx = dy/Math.tan(a*Math.PI/180.0);
+//			if(a<=270){
+//				out[0][0] = -a0;
+//				out[0][1] = a0-Math.abs(dx*dy);
+//				out[1][0] = Math.abs(dx*dy)-a0;
+//				out[1][1] = +a0;
+//			}else{
+//				out[0][0] = Math.abs(dx*dy)-a0;
+//				out[0][1] = +a0;
+//				out[1][0] = -a0;
+//				out[1][1] = a0-Math.abs(dx*dy);
+//			}
+//			return out;
+//		}
+//		if(a>=315 && a<360){
+//			dx = w;
+//			dy = dx*Math.tan(a*Math.PI/180.0);
+//			out[0][0] = a0-Math.abs(dx*dy);
+//			out[0][1] = +a0;
+//			out[1][0] = -a0;
+//			out[1][1] = Math.abs(dx*dy)-a0;
+//			return out;
+//		}		
+//		return out;
+//	}
+	
 	public static double[][] getEdgeKernel(double a){
 		double[][] out = new double[2][2];
 		if(a>=360){
 			int t = (int)(a/360);
 			a -= t*360;
 		}
-		double w = Math.sqrt(0.5);
+		double w = 1; // length of a pixel side
 		double a0 = w*w;
-		double dx, dy;
-		if(a>=0 && a<45){
+		double dx, dy, area;
+		if(a==0){
+			out[0][0] = a0;
+			out[0][1] = a0;
+			out[1][0] = -1;
+			out[1][1] = -1;
+		}
+		if(a>0 && a<45){
 			dx = w;
 			dy = dx*Math.tan(a*Math.PI/180.0);
+			area = 0.5*Math.abs(dx*dy);
 			out[0][0] = +a0;
-			out[0][1] = (a0-Math.abs(dx*dy));
-			out[1][0] = (Math.abs(dx*dy)-a0);
-			out[1][1] = -a0;
-			return out;
+			out[0][1] = a0-area;
+			out[1][0] = area;
+			out[1][1] = -2;
 		}
 		if(a>=45 && a<135){
 			dy = w;
 			dx = dy/Math.tan(a*Math.PI/180.0);
-			if(a<=90){
+			area = 0.5*Math.abs(dx*dy);
+			if(a<90){
 				out[0][0] = +a0;
-				out[0][1] = (Math.abs(dx*dy)-a0);
-				out[1][0] = (a0-Math.abs(dx*dy));
-				out[1][1] = -a0;
+				out[0][1] = area;
+				out[1][0] = a0-area;
+				out[1][1] = -2;
+			}else if(a==90){
+				out[0][0] = a0;
+				out[0][1] = -1;
+				out[1][0] = a0;
+				out[1][1] = -1;
 			}else{
-				out[0][0] = (a0-Math.abs(dx*dy));
-				out[0][1] = -a0;
+				out[0][0] = a0-area;
+				out[0][1] = -2;
 				out[1][0] = +a0;
-				out[1][1] = (Math.abs(dx*dy)-a0);
+				out[1][1] = area;
 			}
-			return out;
 		}
 		if(a>=135 && a<225){
 			dx = w;
 			dy = dx*Math.tan(a*Math.PI/180.0);
-			if(a<=180){
-				out[0][0] = Math.abs(dx*dy)-a0;
-				out[0][1] = -a0;
+			area = 0.5*Math.abs(dx*dy);
+			if(a<180){
+				out[0][0] = area;
+				out[0][1] = -2;
 				out[1][0] = +a0;
-				out[1][1] = a0-Math.abs(dx*dy);
+				out[1][1] = a0-area;
+			}else if(a==180){
+				out[0][0] = -1;
+				out[0][1] = -1;
+				out[1][0] = a0;
+				out[1][1] = a0;
 			}else{
-				out[0][0] = -a0;
-				out[0][1] = Math.abs(dx*dy)-a0;
-				out[1][0] = a0-Math.abs(dx*dy);
+				out[0][0] = -2;
+				out[0][1] = area;
+				out[1][0] = a0-area;
 				out[1][1] = +a0;
 			}
-			return out;
 		}
 		if(a>=225 && a<315){
 			dy = w;
 			dx = dy/Math.tan(a*Math.PI/180.0);
-			if(a<=270){
-				out[0][0] = -a0;
-				out[0][1] = a0-Math.abs(dx*dy);
-				out[1][0] = Math.abs(dx*dy)-a0;
+			area = 0.5*Math.abs(dx*dy);
+			if(a<270){
+				out[0][0] = -2;
+				out[0][1] = a0-area;
+				out[1][0] = area;
 				out[1][1] = +a0;
+			}else if(a==270){
+				out[0][0] = -1;
+				out[0][1] = a0;
+				out[1][0] = -1;
+				out[1][1] = a0;
 			}else{
-				out[0][0] = Math.abs(dx*dy)-a0;
+				out[0][0] = area;
 				out[0][1] = +a0;
-				out[1][0] = -a0;
-				out[1][1] = a0-Math.abs(dx*dy);
+				out[1][0] = -2;
+				out[1][1] = a0-area;
 			}
-			return out;
 		}
 		if(a>=315 && a<360){
 			dx = w;
 			dy = dx*Math.tan(a*Math.PI/180.0);
-			out[0][0] = a0-Math.abs(dx*dy);
+			area = 0.5*Math.abs(dx*dy);
+			out[0][0] = a0-area;
 			out[0][1] = +a0;
-			out[1][0] = -a0;
-			out[1][1] = Math.abs(dx*dy)-a0;
-			return out;
+			out[1][0] = -2;
+			out[1][1] = area;
 		}
 		return out;
 	}
