@@ -47,6 +47,10 @@ public class ImagePanel extends JPanel {
 		}
 	}
 	
+	public BufferedImage getImage() {
+		return this.img;
+	}
+	
 	@Override
 	public void setPreferredSize(Dimension preferredSize) {
 		super.setPreferredSize(preferredSize);

@@ -2253,4 +2253,83 @@ public class ITools {
 		}
 		return;
 	}
+	
+	
+	/**
+	 * Creates a color gradient from the provided grayscale image. The image must be normilized in the range from 0 to 1.
+	 * @param img
+	 * @return
+	 */
+	public static byte[][][] toColorGradient(double[][] img){
+		byte[][][] out = new byte[3][img.length][img[0].length];
+		img = normalizeImage(img);
+		for(int y=0; y<img.length; y++){
+			for(int x=0; x<img[0].length; x++){
+				byte[] vals = getHeatMapColor((float)img[y][x]);
+				out[0][y][x]= vals[0];
+				out[1][y][x]= vals[1];
+				out[2][y][x]= vals[2];
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * Normalize in range 0 to 1
+	 * @param img
+	 * @return
+	 */
+	public static double[][] normalize(double[][] img){
+		int[] l = new int[]{img.length, img[0].length};
+		double[][] out = new double[l[0]][l[1]];
+		double c, max, min;
+		max = min = img[0][0];
+		for(int y=0; y<l[0]; y++){
+			for(int x=0; x<l[1]; x++){
+				max = (img[y][x]>max)?img[y][x]:max;
+				min = (img[y][x]<min)?img[y][x]:min;
+			}
+		}
+		c = 1.0/(max-min);
+		for(int y=0; y<l[0]; y++){
+			for(int x=0; x<l[1]; x++){
+				out[y][x] = (img[y][x]-min)*c;
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * From http://www.andrewnoske.com/wiki/Code_-_heatmaps_and_color_gradients
+	 * @param value
+	 * @return
+	 */
+	public static byte[] getHeatMapColor(float value){
+		byte[] out = new byte[3];
+		int NUM_COLORS = 7;
+		float[][] color = new float [][]{ {0,0,0}, {0,0,1}, {0,1,1}, {0,1,0}, {1,1,0}, {1,0,0}, {1,1,1} };
+	    // A static array of 4 colors:  (blue,   green,  yellow,  red) using {r,g,b} for each.
+		
+		int idx1;        // |-- Our desired color will be between these two indexes in "color".
+		int idx2;        // |
+		float fractBetween = 0;  // Fraction between "idx1" and "idx2" where our value is.
+		
+		if(value <= 0){ // accounts for an input <=0 
+			idx1 = idx2 = 0;           
+		} else if(value >= 1){ // accounts for an input >=0
+			idx1 = idx2 = NUM_COLORS-1; 
+		} else {
+			value = value * (NUM_COLORS-1);        // Will multiply value by 3.
+			idx1  = (int)(value);                  // Our desired color will be after this index.
+			idx2  = idx1+1;                        // ... and before this index (inclusive).
+			fractBetween = value - idx1;    		// Distance between the two indexes (0-1).
+		}
+	 
+		out[0] = (byte) (((color[idx2][0] - color[idx1][0])*fractBetween + color[idx1][0])*255);
+		out[1] = (byte) (((color[idx2][1] - color[idx1][1])*fractBetween + color[idx1][1])*255);
+		out[2] = (byte) (((color[idx2][2] - color[idx1][2])*fractBetween + color[idx1][2])*255);
+		
+		return out;
+	}
+	
 }

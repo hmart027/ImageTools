@@ -1,11 +1,21 @@
 package image.tools;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class IViewer extends JFrame {
 	
@@ -53,11 +63,41 @@ public class IViewer extends JFrame {
 		viewer.setImage(img);
 		viewer.addMouseListener(new MouseListener());
 		viewer.addMouseWheelListener(new MouseWheelListener());
-		
+
+		this.setMenuBar();
 		this.getContentPane().add(viewer);
 		this.pack();
 //		this.setResizable(false);
 		this.setVisible(true);
+		
+	}
+	
+	private void setMenuBar() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem saveItem = new JMenuItem("Save");
+		saveItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(viewer.getImage()!=null) {
+					JFileChooser chooser = new JFileChooser();
+					chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+					chooser.setFileFilter(new FileNameExtensionFilter("Images", new String[] {"jpg", "jpeg", "png", "tiff"}));
+					if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+						String path = chooser.getSelectedFile().getPath();
+						String type = path.substring(path.lastIndexOf(".")+1, path.length());
+					    try {
+							ImageIO.write(viewer.getImage(), type, new File(path));
+						} catch (IOException te) {
+							System.out.println("Unable to save image");
+						}
+					}	
+				}
+			}
+		});
+		fileMenu.add(saveItem);
+		menuBar.add(fileMenu);
+		this.setJMenuBar(menuBar);
 		
 	}
 	
