@@ -16,7 +16,7 @@ public class IViewerMat extends JFrame {
 	
 	int heightGlobal = 800, widhtGlobal = 800;
 		
-	public IViewerMat(String title, int hCount, int vCount){		
+	public IViewerMat(String title, int hCount, int vCount){
 		this.setTitle(title);
 		this.setBounds(0, 0, heightGlobal, widhtGlobal);
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -31,7 +31,7 @@ public class IViewerMat extends JFrame {
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 		
 		for(int y=0; y<vCount; y++){
-			verticalPanels[y] = new HorizontalPanel(w, vd, hCount);
+			verticalPanels[y] = new HorizontalPanel(w, vd-2, hCount);
 			contentPane.add(verticalPanels[y]);
 		}
 				
@@ -57,9 +57,10 @@ public class IViewerMat extends JFrame {
 		
 		public HorizontalPanel(int width, int height, int viewerC){
 			this.width = width-20;
-			this.height = height-10;
+			this.height = height;
 			viewers = new ImagePanel[viewerC];
 			Dimension pDim = new Dimension(this.width/viewerC, this.height);
+			System.out.println("\t"+viewers.length);
 			for(int x=0; x<viewerC; x++){
 				viewers[x] = new ImagePanel(pDim);
 				this.add(viewers[x]);
@@ -70,8 +71,8 @@ public class IViewerMat extends JFrame {
 		public void setBounds(int x, int y, int width, int height){
 			super.setBounds(x, y, width, height);
 			this.width = width-20;
-			this.height = height-10;
-			Dimension pDim = new Dimension(this.width/viewers.length, this.height);
+			this.height = height;
+			Dimension pDim = new Dimension(this.width/viewers.length-2, this.height-2);
 			for(int i=0; i<viewers.length; i++){
 				viewers[i].setPreferredSize(pDim);
 			}
