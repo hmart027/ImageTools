@@ -60,7 +60,6 @@ public class IViewerMat extends JFrame {
 			this.height = height;
 			viewers = new ImagePanel[viewerC];
 			Dimension pDim = new Dimension(this.width/viewerC, this.height);
-			System.out.println("\t"+viewers.length);
 			for(int x=0; x<viewerC; x++){
 				viewers[x] = new ImagePanel(pDim);
 				this.add(viewers[x]);
