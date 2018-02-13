@@ -2332,4 +2332,95 @@ public class ITools {
 		return out;
 	}
 	
+	/**
+	 * Row scans an image. Creates a two-dimensional array 
+	 * (where the first index is the band and the second is the pixel index).
+	 * @param img the byte array image. The first index is the color band, 
+	 * the second is the row index, and the third is the column index.
+	 * @return two-dimensional array representation of the row-scanned image.
+	 * The first index is the color band and the second is the pixel index.
+	 */
+	public static double[][] imageToDoubleArray(byte[][][] img){
+		int[] s = new int[]{img[0].length, img[0][0].length};
+		double[][] out = new double[img.length][s[0]*s[1]];
+		for(int b=0; b<out.length; b++){
+			int c = 0;
+			for(int y=0; y<s[0]; y++){
+				for(int x=0; x<s[1]; x++){
+					out[b][c++] = img[b][y][x] & 0x0FF;
+				}
+			}
+		}
+		return out;
+	}
+	
+	public static double[][] dImageToDoubleArray(double[][][] img){
+		int[] s = new int[]{img[0].length, img[0][0].length};
+		double[][] out = new double[img.length][s[0]*s[1]];
+		for(int b=0; b<out.length; b++){
+			int c = 0;
+			for(int y=0; y<s[0]; y++){
+				for(int x=0; x<s[1]; x++){
+					out[b][c++] = img[b][y][x];
+				}
+			}
+		}
+		return out;
+	}
+
+	/**
+	 * Concatenates two matrices. puts the second one after the first one on the row index. 
+	 * This is used to concatenate images from different filters to create one single, multi-spectral image.
+	 * @param in1
+	 * @param in2
+	 * @return
+	 */
+	public static double[][] concatenate(double[][] in1, double[][] in2){
+		if(in1[0].length!=in2[0].length) return null;
+		double[][] out = new double[in1.length+in2.length][];
+		for(int i=0; i<in1.length; i++){
+			out[i] = in1[i];
+		}
+		for(int i=0; i<in2.length; i++){
+			out[i+in1.length] = in2[i];
+		}
+		return out;
+	}
+	
+	/**
+	 * Gets gray-scale image from array.
+	 * @param img
+	 * @param h
+	 * @param w
+	 * @return
+	 */
+	public static double[][] arrayToImage(double[] img, int h, int w){
+		double[][] out = new double[h][w];
+		int y=0,x=0;
+		for(int c=0; c<img.length; c++){
+			out[y][x++] = img[c];
+			if(x>=w){
+				x=0;
+				y++;
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * Gets multi-spectral image from array.
+	 * @param img
+	 * @param b
+	 * @param h
+	 * @param w
+	 * @return
+	 */
+	public static double[][][] arrayToImage(double[][] img, int b, int h, int w){
+		double[][][] out = new double[b][][];
+		for(int c=0; c<b; c++){
+			out[c] = arrayToImage(img[c], h, w);
+		}
+		return out;
+	}
+	
 }
