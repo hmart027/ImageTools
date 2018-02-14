@@ -5,8 +5,10 @@ import static java.awt.image.BufferedImage.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferUShort;
 import java.awt.image.PixelInterleavedSampleModel;
 import java.awt.image.Raster;
+import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,6 +30,41 @@ public class ImageManipulation {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static short[][][] loadTiffImage(String img){
+		try {
+			return ImageManipulation.loadTiffImage(
+					ImageIO.read(new File(img)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static short[][][] loadTiffImage(BufferedImage image){
+
+		switch (image.getType()) {
+		case BufferedImage.TYPE_CUSTOM:
+
+		}
+
+		WritableRaster raster = image.getRaster();
+		final short[] pixels = ((DataBufferUShort) raster.getDataBuffer()).getData();
+		final int width = image.getWidth();
+		final int height = image.getHeight();
+
+		final int pixelLength = image.getRaster().getNumBands();
+		short[][][] result = new short[pixelLength][height][width];
+		int pixel = 0;
+		for (int row = 0; row < height; row++) {
+			for (int col = 0; col < width; col++) {
+				for (int band = 0; band < pixelLength; band++) {
+					result[band][row][col] = pixels[pixel++];
+				}
+			}
+		}
+		return result;
 	}
 	
 	/**

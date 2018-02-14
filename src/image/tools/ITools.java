@@ -1534,6 +1534,20 @@ public class ITools {
 		return out;
 	}
 	
+	public static double[][][] short2double(short[][][] a){
+		if(a==null) return null;
+		int[] s = new int[]{a.length, a[0].length, a[0][0].length};
+		double[][][] out = new double[s[0]][s[1]][s[2]];
+		for(int c=0; c<s[0]; c++){
+			for(int y=0; y<s[1]; y++){
+				for(int x=0; x<s[2]; x++){
+					out[c][y][x] = (a[c][y][x]);
+				}
+			}
+		}
+		return out;
+	}
+	
 	public static float[][] byte2Float(byte[][] a){
 		if(a==null) return null;
 		int[] s = new int[]{a.length, a[0].length};
@@ -2348,6 +2362,28 @@ public class ITools {
 			for(int y=0; y<s[0]; y++){
 				for(int x=0; x<s[1]; x++){
 					out[b][c++] = img[b][y][x] & 0x0FF;
+				}
+			}
+		}
+		return out;
+	}
+	
+	/**
+	 * Row scans an image. Creates a two-dimensional array 
+	 * (where the first index is the band and the second is the pixel index).
+	 * @param img the byte array image. The first index is the color band, 
+	 * the second is the row index, and the third is the column index.
+	 * @return two-dimensional array representation of the row-scanned image.
+	 * The first index is the color band and the second is the pixel index.
+	 */
+	public static double[][] doubleImageToArray(double[][][] img){
+		int[] s = new int[]{img[0].length, img[0][0].length};
+		double[][] out = new double[img.length][s[0]*s[1]];
+		for(int b=0; b<out.length; b++){
+			int c = 0;
+			for(int y=0; y<s[0]; y++){
+				for(int x=0; x<s[1]; x++){
+					out[b][c++] = img[b][y][x];
 				}
 			}
 		}
