@@ -33,43 +33,49 @@ public class ImgTests {
 //		}
 		
 		try {
-			BufferedImage image = ImageIO.read(new File("/home/harold/14NOV27004452-M2AS-054191978040_01_P001.TIF"));
-			short[] pixels = ((DataBufferUShort)image.getRaster().getDataBuffer()).getData();
-			System.out.println(image.getRaster().getNumBands());
-			System.out.println("Img loaded: "+pixels);
-			
-			final int width = image.getWidth();
-			final int height = image.getHeight();
-
-			final int pixelLength = image.getRaster().getNumBands();
-			short[][][] result = new short[pixelLength][height][width];
-			int pixel = 0;
-			for (int row = 0; row < height; row++) {
-				for (int col = 0; col < width; col++) {
-					for (int band = 0; band < pixelLength; band++) {
-						result[band][row][col] = pixels[pixel++];
-					}
-				}
-			}
-
-			short max = result[0][0][0], min = max;
-			for (int band = 0; band < pixelLength; band++) {
-			    for (int row = 0; row < height; row++) {
-					for (int col = 0; col < width; col++) {
-						if(result[band][row][col]>max)
-							max = result[band][row][col];
-						if(result[band][row][col]<min)
-							min = result[band][row][col];
-					}
-				}
-			}
-			System.out.println("max: "+max);
-			System.out.println("min: "+min);
-			
-			new IViewer(image);
+			new IViewer(ImageIO.read(new File("/home/harold/Pictures/Wallpapers/galaxy.jpg")));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+//		try {
+//			BufferedImage image = ImageIO.read(new File("/home/harold/14NOV27004452-M2AS-054191978040_01_P001.TIF"));
+//			short[] pixels = ((DataBufferUShort)image.getRaster().getDataBuffer()).getData();
+//			System.out.println(image.getRaster().getNumBands());
+//			System.out.println("Img loaded: "+pixels);
+//			
+//			final int width = image.getWidth();
+//			final int height = image.getHeight();
+//
+//			final int pixelLength = image.getRaster().getNumBands();
+//			short[][][] result = new short[pixelLength][height][width];
+//			int pixel = 0;
+//			for (int row = 0; row < height; row++) {
+//				for (int col = 0; col < width; col++) {
+//					for (int band = 0; band < pixelLength; band++) {
+//						result[band][row][col] = pixels[pixel++];
+//					}
+//				}
+//			}
+//
+//			short max = result[0][0][0], min = max;
+//			for (int band = 0; band < pixelLength; band++) {
+//			    for (int row = 0; row < height; row++) {
+//					for (int col = 0; col < width; col++) {
+//						if(result[band][row][col]>max)
+//							max = result[band][row][col];
+//						if(result[band][row][col]<min)
+//							min = result[band][row][col];
+//					}
+//				}
+//			}
+//			System.out.println("max: "+max);
+//			System.out.println("min: "+min);
+//			
+//			new IViewer(image);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
 		
 	}
 

@@ -1,7 +1,10 @@
 package image.tools;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
@@ -9,7 +12,7 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
-public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotionListener{
+public class ImagePanel extends JPanel implements MouseListener, MouseWheelListener, MouseMotionListener, KeyListener{
 
 	private static final long serialVersionUID = 7613874066609166472L;
 	private Dimension dim;
@@ -20,6 +23,8 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 	private boolean enableZoom = true;
 	
 	private int pointX, pointY;
+	private int lx, ly;
+	private boolean dragging;
 
 	public ImagePanel(Dimension dim){
 		this.dim = dim;
@@ -27,14 +32,22 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 			this.setPreferredSize(dim);
 		else
 			this.setPreferredSize(new Dimension(500,500));
+		this.addMouseListener(this);
 		this.addMouseWheelListener(this);
 		this.addMouseMotionListener(this);
+		this.addKeyListener(this);
 	}
 	
 	public void setImage(BufferedImage img){
+		setImage(img, true);
+	}
+	
+	public void setImage(BufferedImage img, boolean recenter){
 		this.imgOriginal = img;
-		setImgDims();
-		computeMaxMinZomm();
+		if(recenter){
+			setImgDims();
+			computeMaxMinZomm();
+		}
 		repaint();
 	}
 	
@@ -67,8 +80,8 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 			if(maxZoom<imgH)
 				maxZoom = imgH;
 		}
-		this.zxOff = 0;
-		this.zyOff = 0;
+		this.zxOff = xOff;
+		this.zyOff = yOff;
 	}
 	
 	public BufferedImage getImage() {
@@ -89,11 +102,12 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 		if(dim==null || !dim.equals(getSize())){
 			this.dim = getSize();
 			setImgDims();
+			computeMaxMinZomm();
 		}
 		g2.setColor(java.awt.Color.BLACK);
 		g2.fillRect(0, 0, dim.width, dim.height);
 		if(imgOriginal!=null){
-			g.drawImage(imgOriginal, xOff-zxOff, yOff-zyOff, (int)(zoomLvl*imgW), (int)(zoomLvl*imgH), null);
+			g.drawImage(imgOriginal, zxOff, zyOff, (int)(zoomLvl*imgW), (int)(zoomLvl*imgH), null);
 		}
 	}
 	
@@ -104,11 +118,15 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 		if(zoomLvl<minZoom){
 			zoomLvl = minZoom;
 		}
-//		zxOff = (int) ((zoomLvl-1)*imgW)/2;
-//		zyOff = (int) ((zoomLvl-1)*imgH)/2;
-		zxOff = (int) ((zoomLvl-1)*imgW/2f-pointX/zoomLvl-pointX*this.zoomLvl);
-		zyOff = (int) ((zoomLvl-1)*imgH/2f-pointY/zoomLvl-pointY*this.zoomLvl);
+		float z = zoomLvl/this.zoomLvl;
+		zxOff = (int) -(-zxOff*z+(z-1f)*(pointX));
+		zyOff = (int) -(-zyOff*z+(z-1f)*(pointY));
+		
 		this.zoomLvl = zoomLvl;
+		if(zoomLvl==minZoom){
+			zxOff = xOff;
+			zyOff = yOff;
+		}
 		repaint();
 	}
 
@@ -118,12 +136,67 @@ public class ImagePanel extends JPanel implements MouseWheelListener, MouseMotio
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {		
+	public void mouseDragged(MouseEvent e) {
+		zxOff += e.getX() - lx;
+		zyOff += e.getY() - ly;
+		lx = e.getX();
+		ly = e.getY();
+		repaint();
 	}
 
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		pointX = e.getX();
 		pointY = e.getY();
+	}
+
+	
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		switch(e.getKeyCode()){
+			default:
+				System.out.println(e.getKeyCode());
+		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		dragging = true;
+		lx = e.getX();
+		ly = e.getY();
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		dragging = false;
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		
 	}
 }
