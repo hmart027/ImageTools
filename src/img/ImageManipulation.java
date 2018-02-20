@@ -98,22 +98,22 @@ public class ImageManipulation {
 		      return result;
 	      }
 	      case TYPE_4BYTE_ABGR:
-//	    	  System.out.println("4BYTE_ABGR");
+	    	  System.out.println("4BYTE_ABGR");
 	    	  break;
 	      case TYPE_4BYTE_ABGR_PRE:
-//	    	  System.out.println("4BYTE_ABGR_PRE");
+	    	  System.out.println("4BYTE_ABGR_PRE");
 	    	  break; 
 	      case TYPE_INT_RGB:
-//	    	  System.out.println("INT_RGB");
+	    	  System.out.println("INT_RGB");
 	    	  break;
 	      case TYPE_INT_BGR:
-//	    	  System.out.println("INT_BGR");
+	    	  System.out.println("INT_BGR");
 	    	  break;
 	      case TYPE_INT_ARGB:
-//	    	  System.out.println("INT_ARGB");
+	    	  System.out.println("INT_ARGB");
 	    	  break;
 	      case TYPE_INT_ARGB_PRE:
-//	    	  System.out.println("INT_ARGB_PRE");
+	    	  System.out.println("INT_ARGB_PRE");
 	    	  break;
 	      case 	TYPE_BYTE_BINARY:{
 			System.out.println("TYPE_BYTE_BINARY");		
@@ -149,6 +149,9 @@ public class ImageManipulation {
 	      }
 	    	  
 	      }
+	      
+
+    	  System.out.println(image.getType());
 	      
 	      byte[][][] result = new byte[4][height][width];
 	      if (hasAlphaChannel) {
