@@ -35,8 +35,12 @@ public class IViewer extends JFrame {
 		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.screen = this.getToolkit().getScreenSize();
 		
-		int w = img.getWidth();
-		int h = img.getHeight();
+		int w = widhtGlobal;
+		int h = heightGlobal;
+		if(img!=null){
+			w = img.getWidth();
+			h = img.getHeight();
+		}
 		float aspect = (float)w/(float)h;
 		
 		if(w>screen.getWidth()-20 || h>screen.getHeight()-20){
