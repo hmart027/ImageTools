@@ -43,12 +43,17 @@ public class ImagePanel extends JPanel implements MouseListener, MouseWheelListe
 	}
 	
 	public void setImage(BufferedImage img, boolean recenter){
+		setImage(img, recenter, true);
+	}
+	
+	public void setImage(BufferedImage img, boolean recenter, boolean repaint){
 		this.imgOriginal = img;
 		if(recenter){
 			setImgDims();
 			computeMaxMinZomm();
 		}
-		repaint();
+		if(repaint)
+			repaint();
 	}
 	
 	private void setImgDims(){
@@ -96,6 +101,7 @@ public class ImagePanel extends JPanel implements MouseListener, MouseWheelListe
 		computeMaxMinZomm();
 	}
 	
+	@Override
 	public void paint(java.awt.Graphics g){
 		super.paintComponents(g);
 		java.awt.Graphics2D g2 = (java.awt.Graphics2D)g;
